@@ -1,0 +1,133 @@
+*{
+    /* 初始化 */
+    margin: 0;
+    padding: 0;
+}
+
+/* 最外层的样式 */
+.container{
+    width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* 外层div 图片的样式 */
+.out-div img{
+    width: 200px;
+    height: 200px;
+    /* 对图片进行剪切，保留原始比例 */
+    object-fit: cover;
+}
+/* 内层div 图片的样式 */
+.in-div img{
+    width: 100px;
+    height: 100px;
+    /* 对图片进行剪切，保留原始比例 */
+    object-fit: cover;
+}
+/* 盒子 */
+.box{
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    /* 开启3D效果 */
+    transform-style: preserve-3d;
+    /* 执行动画：动画名 时长 线性的 无限次播放 */
+    animation: rotateAnimate 10s linear infinite;
+}
+/* 外层div 统一的样式 */
+.out-div{
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    /* 动画过渡 */
+    transition: transform 1s ease-in;
+}
+/* 外层div 单独的样式 */
+/* 前 */
+.out-front{
+    transform: translateZ(100px);
+}
+/* 后 */
+.out-back{
+    transform: translateZ(-100px) rotateY(180deg);
+}
+/* 左 */
+.out-left{
+    transform: translateX(-100px) rotateY(-90deg);
+}
+/* 右 */
+.out-right{
+    transform: translateX(100px) rotateY(90deg);
+}
+/* 上 */
+.out-top{
+    transform: translateY(-100px) rotateX(90deg);
+}
+/* 下 */
+.out-bottom{
+    transform: translateY(100px) rotateX(-90deg);
+}
+/* 鼠标移入，外层div各个面的样式变化 */
+.container:hover .out-front{
+    transform: translateZ(200px);
+}
+.container:hover .out-back{
+    transform: translateZ(-200px) rotateY(180deg);
+}
+.container:hover .out-left{
+    transform: translateX(-200px) rotateY(-90deg);
+}
+.container:hover .out-right{
+    transform: translateX(200px) rotateY(90deg);
+}
+.container:hover .out-top{
+    transform: translateY(-200px) rotateX(90deg);
+}
+.container:hover .out-bottom{
+    transform: translateY(200px) rotateX(-90deg);
+}
+/* 内层div 统一的样式 */
+.in-div{
+    margin-left: 50px;
+    margin-top: 50px;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+}
+/* 内层div 单独的样式 */
+/* 前 */
+.in-front{
+    transform: translateZ(50px);
+}
+/* 后 */
+.in-back{
+    transform: translateZ(-50px) rotateY(180deg);
+}
+/* 左 */
+.in-left{
+    transform: translateX(-50px) rotateY(-90deg);
+}
+/* 右 */
+.in-right{
+    transform: translateX(50px) rotateY(90deg);
+}
+/* 上 */
+.in-top{
+    transform: translateY(-50px) rotateX(90deg);
+}
+/* 下 */
+.in-bottom{
+    transform: translateY(50px) rotateX(-90deg);
+}
+
+/* 定义动画 */
+@keyframes rotateAnimate {
+    0%{
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+    100%{
+        transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+    }
+}

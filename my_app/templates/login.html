@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- 引入css文件 -->
+        <link rel="stylesheet" href="{{url_for('static',filename='login.css')}}">
+        <!-- 引入jquery -->
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='javascript/register.js')}}"></script>
+        <title>登录</title>
+        <link rel="shortcut icon" href="{{url_for('static',filename='ico/main.jpeg')}}">
+    </head>
+    <body>
+        {%if error%}
+        <div >
+        <button   class="data_dismissed_right" data-dismiss="alert">{{error}}</button>
+    </div>
+        {%endif%}
+        <!-- 最外层的大盒子 -->
+       <div class="box">
+        <!-- 滑动盒子 -->
+        <div class="pre-box">
+            <h1>WELCOME</h1>
+            <p>JOIN US!</p>
+            <div class="img-box">
+                <img src="/static/img/waoku.jpg" alt="">
+            </div>
+        </div>
+        <!-- 注册盒子 -->
+        <div class="register-form">
+            <!-- 标题盒子 -->
+            <div class="title-box">
+                <h1>注册</h1>
+            </div>
+            <!-- 输入框盒子 -->
+            <form action="{{url_for('register')}}" method="post">
+            <div class="input-box">
+            
+                <input type="text" placeholder="用户名" name="username">
+                <input type="password" placeholder="密码" name="password">
+                <input type="password" placeholder="确认密码" name="password_again">
+                <input type="email" placeholder="邮箱" name="email">
+            </div>
+            
+            
+            <!-- 按钮盒子 -->
+            <div class="btn-box">
+                <button>注册</button>
+                <!-- 绑定点击事件 -->
+            </form>
+                <p onclick="mySwitch()">已有账号?去登录</p>
+                
+            </div>
+        </div>
+        <!-- 登录盒子 -->
+        <div class="login-form">
+            <!-- 标题盒子 -->
+            <div class="title-box">
+                <h1>登录</h1>
+            </div>
+            <!-- 输入框盒子 -->
+            <form action="{{url_for('login')}}" method="post">
+            <div class="input-box">
+                
+                <input type="text" placeholder="用户名" name="username">
+                <input type="password" placeholder="密码" name="password">
+                
+            </div>
+        
+            <!-- 按钮盒子 -->
+            <div class="btn-box">
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp
+                <button>登录</button>
+            </form>
+                <!-- 绑定点击事件 -->
+                <p onclick="mySwitch()">没有账号?去注册</p>
+                <a href="{{url_for('reset_password_request')}}">找回密码</a>
+            </div>
+        </div>
+       </div>
+       <script>
+            // 滑动的状态
+             let flag=true
+             const mySwitch=()=>{
+                if(flag){
+                    // 获取到滑动盒子的dom元素并修改它移动的位置
+                    $(".pre-box").css("transform","translateX(100%)")
+                    // 获取到滑动盒子的dom元素并修改它的背景颜色
+                    $(".pre-box").css("background-color","#c9e0ed")
+                    //修改图片的路径
+                    $("img").attr("src","/static/img/wuwu.jpeg")
+                    
+                }
+                else {
+                    $(".pre-box").css("transform","translateX(0%)")
+                    $(".pre-box").css("background-color","#edd4dc")
+                    $("img").attr("src","/static/img/waoku.jpg")
+                }
+                flag=!flag
+             }
+       </script>
+       <script>
+            const bubleCreate=()=>{
+                // 获取body元素
+                const body = document.body
+                // 创建泡泡元素
+                const buble = document.createElement('span')
+                // 设置泡泡半径
+                let r = Math.random()*5 + 25 //半径大小为25~30
+                // 设置泡泡的宽高
+                buble.style.width=r+'px'
+                buble.style.height=r+'px'
+                // 设置泡泡的随机起点
+                buble.style.left=Math.random()*innerWidth+'px'
+                // 为body添加buble元素
+                body.append(buble)
+                // 4s清除一次泡泡
+                setTimeout(()=>{
+                    buble.remove()
+                },4000)
+            }
+            // 每200ms生成一个泡泡
+            setInterval(() => {
+                bubleCreate()
+            }, 200);
+        </script>
+    </body>
+</html>

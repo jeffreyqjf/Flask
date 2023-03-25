@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script type="text/javascript" src="{{url_for('static',filename='javascript/register_token.js')}}"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='login.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='register_token.css')}}">
+    <link rel="shortcut icon" href="{{url_for('static',filename='ico/main.jpeg')}}">
+    
+    
+</head>
+<body >
+    {%if error%}
+        <div >
+        <button   class="data_dismissed" data-dismiss="alert">{{error}}</button>
+    </div>
+        {%endif%}
+    <div class="box">
+        <h2>请输入验证码口令</h2>
+        <form action="/register_token" method="post">
+        <div class="input-box">
+            
+            <input type="text" placeholder="验证码口令" name='token_register_check'/>
+            <div class="btn-box">
+                <div >
+                    <button>提交</button>
+                    
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+    <script>
+            const bubleCreate=()=>{
+                // 获取body元素
+                const body = document.body
+                // 创建泡泡元素
+                const buble = document.createElement('span')
+                // 设置泡泡半径
+                let r = Math.random()*5 + 25 //半径大小为25~30
+                // 设置泡泡的宽高
+                buble.style.width=r+'px'
+                buble.style.height=r+'px'
+                // 设置泡泡的随机起点
+                buble.style.left=Math.random()*innerWidth+'px'
+                // 为body添加buble元素
+                body.append(buble)
+                // 4s清除一次泡泡
+                setTimeout(()=>{
+                    buble.remove()
+                },4000)
+            }
+            // 每200ms生成一个泡泡
+            setInterval(() => {
+                bubleCreate()
+            }, 200);
+        </script>
+
+
+</body>
+</html>

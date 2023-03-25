@@ -1,0 +1,131 @@
+*{
+    /* 初始化 取消页面的内外边距 */
+    margin: 0;
+    padding: 0;
+}
+body{
+    height: 100vh;
+    /* 弹性布局 水平垂直居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.text{
+    color: #fff;
+    font-size: 30px;
+    /* 字间距 */
+    letter-spacing: 15px;
+}
+
+/* 定义动画 */
+@keyframes bgAnimation {
+    0%{
+        background-position: 0% 50%;
+    }
+    50%{
+        background-position: 100% 50%;
+    }
+    100%{
+        background-position: 0% 50%;
+    }
+}
+.btn_a{
+    /* 相对定位 */
+    position: relative;
+    width: 400px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 24px;
+    color: #fff;
+    /* 渐变背景 */
+    background: linear-gradient(to right,#03a9f4,#f441a5,#ffeb3b,#09a8f4);
+    /* 背景渐变色大小 */
+    background-size: 400%;
+    /* 圆角 */
+    border-radius: 50px;
+    z-index: 1;
+}
+/* 发光效果 */
+.btn_a::before{
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    bottom: -5px;
+    right: -5px;
+    /* 渐变背景 */
+    background: linear-gradient(to right,#03a9f4,#f441a5,#ffeb3b,#09a8f4);
+    /* 背景渐变色大小 */
+    background-size: 400%;
+    /* 圆角 */
+    border-radius: 50px;
+    /* 位于按钮之下 */
+    z-index: -1;
+    /* 设置模糊度 显示发光效果 */
+    filter: blur(20px);
+}
+/* 鼠标移入执行动画 */
+.btn_a:hover{
+    /* 动画：名称 时间 infinite是无限次播放 */
+    animation: streamer 8s infinite;
+}
+.btn_a:hover::before{
+    animation: streamer 8s infinite;
+}
+/* 接下来定义动画 */
+@keyframes streamer{
+    100%{
+        /* 背景位置 */
+        background-position: -400% 0;
+    }
+}
+#plane{
+    color: #fff;
+    font-size: 70px;
+    /* 绝对定位 */
+    position: absolute;
+    /* 弹性布局 水平+垂直居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logout{
+    position:absolute;
+    right: 20px;
+    top: 10px;
+}
+.index{
+    position:absolute;
+    left: 20px;
+    top: 10px;
+}
+.top{
+    position:absolute;
+    top: 50px;
+    color: rgb(212, 210, 210);
+}
+.top_music{
+    position:absolute;
+    top: 0px;
+    color: rgb(212, 210, 210);
+}
+.next_buttom{
+    position:absolute;
+    bottom: 20px;
+    color: rgb(212, 210, 210);
+}
+h2{
+    color: rgb(8, 35, 75);
+}
+.left_text{
+    position:absolute;
+    left: 20px;
+}
+.right_text{
+    position:absolute;
+    right: 20px;
+}
