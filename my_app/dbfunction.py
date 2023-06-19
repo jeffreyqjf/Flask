@@ -92,7 +92,7 @@ def change_user(g,user,set_password):
 
 def create_user_file(username):
     print(os.getcwd())  # C:\Users\de'l'l\PycharmProjects\web
-    path = os.path.join(os.getcwd(), 'my_app_birthday')
+    path = os.path.join(os.getcwd(), 'my_app')
     if not os.path.exists(os.path.join(path, f'templates/users/{username}')):  # if it was not the user I care
         os.mkdir(os.path.join(path, f'templates/users/{username}'))  # create html
         os.mkdir(os.path.join(path, f'static/users/{username}'))  # create css
