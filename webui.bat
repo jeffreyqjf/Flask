@@ -7,7 +7,7 @@ IF EXIST venv (
     REM 激活虚拟环境
     
     call venv\Scripts\activate
-    
+    python.exe -m pip install --upgrade pip
     pip install -r requirements.txt
 
 
@@ -23,10 +23,13 @@ IF EXIST venv (
 
     REM 激活虚拟环境
     call venv\Scripts\activate
-    
+    python.exe -m pip install --upgrade pip
     REM 安装所需的Python包
     pip install -r requirements.txt
+    python run.py
 
+    pause
+    
     REM 退出虚拟环境
     deactivate
 )
