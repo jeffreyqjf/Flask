@@ -3,6 +3,7 @@ from flask_mail import Mail
 
 app = Flask(__name__)
 app.config['database'] = 'data.db'
+app.config['remark_db'] = 'remark.db'
 app.config['MAIL_SERVER'] = 'smtp.qq.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = '3172268428@qq.com'

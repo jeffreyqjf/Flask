@@ -9,8 +9,12 @@ try:
                 email varchar(50))''')  # int(20) 和integer区别
     db.commit()
 except:
-    print('数据库已创建')
-
-
+    print('用户数据库已创建')
+remark_db = sqlite3.connect('remark.db')
+cursor = remark_db.cursor()
+try:
+    pass
+except:
+    pass
 cursor.close()
-db.close()
+remark_db.close()

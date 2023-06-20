@@ -13,7 +13,7 @@ from my_app.email import send_password_reset_email, send_register_mail
 @app.before_request
 def before_request():
     g.db = sqlite3.connect(app.config['database'])
-
+    g.remark_db = sqlite3.connect(app.config['remark_db'])
     if session.get('token_register'):
         g.token_register = session.get('token_register')
         g.email_save = session.get('email_save')
@@ -187,6 +187,8 @@ def reset_password(token):
             else:
                 change_user(g, user=username, set_password=set_password)
                 return render_template('set_password_successful.html')
+
+
 @app.route("/user_page/<page_number>")
 def user_page(page_number):
     if 'username' in session:
@@ -194,6 +196,17 @@ def user_page(page_number):
         return render_template(f'users/{username}/user_page_{page_number}.html', username=username)
     else:
         return redirect(url_for('login'))
+
+
+@app.route('/remark/<page_number>')
+def remark(page_number):
+    if 'username' in session:
+        username = session.get('username')
+
+        return render_template(f'remarks/remark_page_{page_number}.html', username=username)
+    else:
+        return redirect(url_for('login'))
+
 
 
 

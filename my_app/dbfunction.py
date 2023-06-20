@@ -92,8 +92,8 @@ def get_token(g,email,expires_in=600):
         token = jwt.encode({'reset_password':result[0],'exp': time() + expires_in},app.config['SECRET_KET'],algorithm='HS256')
         print('token:',type(token),token)
         print('username:',result[1])
+        return token, result[3], result[1]
 
-        return (token,result[3],result[1])
 
 def tokens_user(g,token):
     cur = g.db.cursor()
