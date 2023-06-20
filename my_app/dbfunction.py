@@ -31,11 +31,20 @@ def check_username(g, username):
     return result
 
 
-def check_email(g, email,username):
+def check_email_whether_unique(g, email):
+    """
+    this function is used to confirm that email is not used again
+    :param g: g.db is a database
+    :param email: email is checked whether it is unique in user table
+    :return: bool
+    """
+
+def check_email(g, email, username):
     cur = g.db.cursor()
-    cur.execute('select * from user where email=?',(email,))
+    cur.execute('select * from user where email=?', (email,))
     result = cur.fetchone()
     cur.close()
+    print(result)
     if result is not None:
         if username in result:
             return True
@@ -51,6 +60,7 @@ def append_user(g, username, password, email):
     print(password_hash,type(password_hash))
     print("email:",email)
     print(password,type(password))
+    print(username)
     cur.execute('insert into user(username,password_hash,email) values(?,?,?)',(username,password_hash,email))
     g.db.commit()
     print('welcome to new user')

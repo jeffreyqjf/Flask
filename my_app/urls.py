@@ -129,6 +129,7 @@ def register_token():
     else:
         token_register = session.get('token_register')
         token_register_check = request.form.get('token_register_check')
+        # check register token
         if token_register_check == token_register:
             password = session.get('password_save')
             email = session.get('email_save')
@@ -155,6 +156,7 @@ def reset_password_request():
         email = request.form.get('email')
         username = request.form.get('username')
         if not check_email(g, email, username):
+            print(check_email(g, email, username))
             error = '无该用户'
             return render_template('reset_password_request.html',error=error)
         else:
