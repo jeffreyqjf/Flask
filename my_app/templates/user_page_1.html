@@ -4,13 +4,10 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
     <title>主页</title>
     <link rel="stylesheet" href="{{url_for('static',filename='users/'+username+'/user_page.css')}}">
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="{{url_for('static',filename='ico/main.jpeg')}}">
-   
-    
 </head>
 
 <body>
@@ -45,7 +42,7 @@
     </div>
     <div class='logout'><a  href="{{url_for('logout')}}"><h3>logout</h3></a></div>
     <div class='index'><a  href="{{url_for('index')}}"><h3>index</h3></a></div>
-    <h2>hi，stranger！</h2>
+    <h2>hi，{{username}}！</h2>
     
     
     

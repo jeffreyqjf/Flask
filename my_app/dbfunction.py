@@ -7,10 +7,17 @@ from time import time
 import os
 import shutil
 
+
 def check_password(g, username, password):
     cur = g.db.cursor()
     cur.execute(f'select * from user where username="{username}"')
-    result = cur.fetchone()[2]
+
+    result = cur.fetchone()
+    print('check_password', result)
+    if result:
+        result = result[2]
+    else:
+        return False  # 出现账号密码错误，实际是没有该用户
     cur.close()
     return check_password_hash(result, password)
 
@@ -38,6 +45,14 @@ def check_email_whether_unique(g, email):
     :param email: email is checked whether it is unique in user table
     :return: bool
     """
+    cursor = g.db.cursor()
+    cursor.execute(f'select * from user where email="{email}"')
+    result = cursor.fetchone()
+    if result:
+        return False
+    else:
+        return True
+
 
 def check_email(g, email, username):
     cur = g.db.cursor()

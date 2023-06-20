@@ -6,7 +6,7 @@ try:
                 id integer primary key  AUTOINCREMENT,
                 username varchar(20),
                 password_hash varchar(800),
-                email varchar(50))''')#int(20) 和integer区别
+                email varchar(50))''')  # int(20) 和integer区别
     db.commit()
 except:
     print('数据库已创建')

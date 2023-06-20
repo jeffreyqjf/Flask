@@ -4,7 +4,7 @@ import sqlite3
 from my_app import app
 from flask import session, redirect, render_template, url_for, request
 from my_app.dbfunction import check_password, check_all_user, check_email, check_username, append_user, tokens_user
-from my_app.dbfunction import change_user, tokens_user,get_token,create_user_file
+from my_app.dbfunction import change_user, tokens_user,get_token,create_user_file, check_email_whether_unique
 from flask import g,flash,get_flashed_messages
 from my_app.email import send_password_reset_email, send_register_mail
 
@@ -101,7 +101,7 @@ def register():
         elif check_username(g, username):
             error = '用户名已存在'
             return render_template('register.html', error=error)
-        elif check_email(g, email, username=username):
+        elif not check_email_whether_unique(g, email):
             error = '邮箱已注册'
             return render_template('register.html', error=error)
         else:
@@ -179,7 +179,6 @@ def reset_password(token):
             return render_template('404.html')
         else:
             username = tokens_user(g,token)[1]
-
             set_password = request.form.get('set_password')
             set_password_again = request.form.get('set_password_again')
             if set_password_again != set_password:
@@ -188,12 +187,11 @@ def reset_password(token):
             else:
                 change_user(g, user=username, set_password=set_password)
                 return render_template('set_password_successful.html')
-@app.route("/user_page")
-def user_page():
+@app.route("/user_page/<page_number>")
+def user_page(page_number):
     if 'username' in session:
         username = session.get('username')
-
-        return render_template('user_page.html', username=username)
+        return render_template(f'users/{username}/user_page_{page_number}.html', username=username)
     else:
         return redirect(url_for('login'))
 
