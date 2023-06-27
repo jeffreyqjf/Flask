@@ -151,7 +151,7 @@ def create_remark_area_table(g, table_name):
     cur.close()
 
 
-def insert_into_post_table(g, poster_name, title, main_contain, poster_id, herf):
+def insert_into_post_table(g, poster_name, title, main_contain, herf):
     """
     插入post表主要信息
     :param g:
@@ -163,8 +163,8 @@ def insert_into_post_table(g, poster_name, title, main_contain, poster_id, herf)
     :return:
     """
     cur = g.remark_db.cursor()
-    cur.execute(f'insert into post(poster_name, title, main_contain, poster_id, herf) values(?,?,?,?,?)',
-                (poster_name, title, main_contain, poster_id, herf))
+    cur.execute(f'insert into post(poster_name, title, main_contain, herf) values(?,?,?,?)',
+                (poster_name, title, main_contain, herf))
     g.remark_db.commit()
     cur.close()
 
@@ -182,3 +182,21 @@ def insert_remark(g, table_name, remark_people, remark):
     cur.execute(f'insert into {table_name}(remark_people, remark) values(?,?)', (remark_people, remark))
     g.remark_db.commit()
     cur.close()
+
+
+def count_post_num(g):
+    cur = g.remark_db.cursor()
+    cur.execute('select * from post')
+    result = cur.fetchall()
+    cur.close()
+    return len(result)
+
+
+def find_table_name(g, id):
+    cur = g.remark_db.cursor()
+    cur.execute(f'select * from post where id={id}')
+    result = cur.fetchone()
+    result = result[1] + '_' + str(result[0])
+    cur.close()
+    # print("type", type(result))
+    return result

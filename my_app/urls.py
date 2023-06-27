@@ -5,7 +5,7 @@ from my_app import app
 from flask import session, redirect, render_template, url_for, request
 from my_app.dbfunction import check_password, check_all_user, check_email, check_username, append_user, tokens_user
 from my_app.dbfunction import change_user, tokens_user,get_token,create_user_file, check_email_whether_unique
-from  my_app.dbfunction import insert_into_post_table
+from my_app.dbfunction import insert_into_post_table, count_post_num, insert_remark, create_remark_area_table, find_table_name
 from flask import g,flash,get_flashed_messages
 from my_app.email import send_password_reset_email, send_register_mail
 
@@ -233,51 +233,63 @@ def remark(page_number):
         return redirect(url_for('login'))
 
 
-@app.route("/remark_area/<poster_id:str>/<page_number>")
-def remark_area(poster_id, page_number):
+@app.route("/remark_area/<str:id>/<page_number>")
+def remark_area(id, page_number):
     """
 
-    :param poster_id:
+    :param id:
     :param page_number:
     :return:
     """
     if 'username' in session:
         username = session.get('username')
         dictionary = {}
-
+        table_name = find_table_name(g, id)
+        cur = g.remark_db.cursor()
+        cur.execute(f"select * from {table_name}")
+        result = cur.fetchall()
+        count = 5  # 每页的评论个数
+        if result:  # 防止None
+            dictionary['remark'] = result[page_number * count - count, page_number * count]
+        else:
+            dictionary['remark'] = []
+        cur.close()
         if request.method == 'GET':
-            cur = g.remark_db.cursor()
-            cur.execute(f"select * from {poster_id}")
-            result = cur.fetchall()
-            count = 5  # 每页的评论个数
-            if result:  # 防止None
-                dictionary['remark'] = result[page_number * count - count, page_number * count]
+            if page_number == 1:
+                return render_template(f'remark_post/remark_page_main.html', username=username, dictionary=dictionary)
             else:
-                dictionary['remark'] = []
-            cur.close()
-            return render_template(f'remark_post/remark_page_{page_number}.html', username=username, dictionary=dictionary)
+                return render_template(f'remark_post/remark_page_other.html', username=username, dictionary=dictionary)
         elif request.method == 'POST':
             # 发表评论
             # 获取基本信息
-            pass
-
-
+            remark_people = request.form.get("remark_people")
+            remark = request.form.get("remark")
+            table_name = find_table_name(g, id)
+            insert_remark(g, table_name, remark_people, remark)
+            flag = True  # 成功
+            return render_template(f'remark_post/remark_page_main.html', username=username, dictionary=dictionary, flag=flag)
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/post')
+@app.route('/post', methods=['get', 'post'])
 def post():
     if 'username' in session:
         username = session.get('username')
         dictionary = {}
         if request.method == 'GET':
-            return render_template(f'')
+            return render_template('remark_post/post.html')
         elif request.method == "POST":
             # 发布帖子
             # 获取基本信息
-            insert_into_post_table(g)
-            return render_template()
+            title = request.form.get("title")
+            main_contain = request.form.get("main_contain")
+            id = count_post_num(g)  # 新的id
+            herf = url_for("remark_area", id=id, page_number=1)  # 传入参数
+            table_name = username + "_" + str(id)
+            insert_into_post_table(g, poster_name=username, title=title, main_contain=main_contain, herf=herf)
+            create_remark_area_table(g, table_name)
+            return render_template("remark_post/post.html")
     else:
         return redirect(url_for('login'))
 

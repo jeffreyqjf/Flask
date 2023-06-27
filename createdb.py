@@ -21,7 +21,6 @@ try:
                     poster_name varchar(20),
                     title varchar(20),
                     main_contain varchar(800),
-                    post_id integer,
                     herf varchar(500))''')
     remark_db.commit()
     print('创建评论数据表成功')

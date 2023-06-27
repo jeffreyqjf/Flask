@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>帖子</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='users/'+username+'/user_page.css')}}">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{{url_for('static',filename='ico/main.jpeg')}}">
+</head>
+
+<body>
+    <div class="text">
+    <div id="plane">
+        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+    </div>
+    <script>
+        let plane=document.getElementById('plane');
+        let deg=0,ex=0,ey=0,vx=0,vy=0,count=0;
+        window.addEventListener('mousemove',(e)=>{
+            ex=e.x-plane.offsetLeft-plane.clientWidth/2;
+            ey=e.y-plane.offsetTop-plane.clientHeight/2;
+            deg=360*Math.atan(ey/ex)/(2*Math.PI)+45;
+            if(ex<0){
+                deg+=180;
+            }
+            count=0;
+        })
+        function draw(){
+            plane.style.transform='rotate('+deg+'deg)';
+            if(count<100){
+                vx+=ex/100;
+                vy+=ey/100;
+            }
+            plane.style.left=vx+'px';
+            plane.style.top=vy+'px';
+            count++;
+        }
+        setInterval(draw, 1);
+    </script>
+    </div>
+    <div class='logout'><a  href="{{url_for('logout')}}"><h3>logout</h3></a></div>
+    <div class='index'><a  href="{{url_for('index')}}"><h3>index</h3></a></div>
+    <h2>hi，{{username}}！</h2>
+<body background="/static/{{background}}.png">
+    <audio autoplay="autoplay" controls="controls">
+    <source src='/static/music/{{music}}.mp3>' type="audio/ogg" />
+                Your browser does not support the
+                <code>audio</code> element.
+    </audio>
+
+    <form method="post" action="">
+        <div class="form-control">
+
+             {{formss.name}}
+        </div>
+            {% for err in formss.name.errors %}
+        <div>
+            <p style="color:red">{{err}}</p>
+        </div>
+        {% endfor %}
+        <div class="form-control">
+
+            {{formss.word}}
+        </div>
+        {% for err in formss.word.errsors %}
+        <div>
+
+            <p style="color:red">{{err}}</p>
+        </div>
+        {% endfor %}
+        <div class="form-control">
+            {{ formss.csrf_token }}
+            {{formss.submit}}
+        </div>
+        {% for err in formss.submit.errsors %}
+        <div>
+
+            <p style="color:red">{{err}}</p>
+        </div>
+        {% endfor %}
+    </form>
+    {%if flag%}
+    <h3>提交成功</h3>
+
+    <img src="static/pic/{{pic}}">
+    {%endif%}
+    <h4>艾老师也可以发表哦</h4>
+    {% for comment in word%}
+    <div><h3>{{comment[2]}}:</h3><span>&nbsp &nbsp &nbsp{{comment[1]}}</span></div>
+        {%endfor%}
+    <a href="/page/{{page_now-1}}">上一页</a>   当前页数:{{page_now}}   <a href="/page/{{page_now+1}}">下一页</a>
+
+
+
+</body>
+
+
+
+</body>
+
+</html>
