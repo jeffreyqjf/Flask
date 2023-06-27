@@ -5,9 +5,9 @@ from my_app import app
 from flask import session, redirect, render_template, url_for, request
 from my_app.dbfunction import check_password, check_all_user, check_email, check_username, append_user, tokens_user
 from my_app.dbfunction import change_user, tokens_user,get_token,create_user_file, check_email_whether_unique
+from  my_app.dbfunction import insert_into_post_table
 from flask import g,flash,get_flashed_messages
 from my_app.email import send_password_reset_email, send_register_mail
-
 
 
 @app.before_request
@@ -19,8 +19,6 @@ def before_request():
         g.email_save = session.get('email_save')
         g.password_save = session.get('password_save')
         g.username_save = session.get('username_save')
-
-
 
 
 @app.teardown_request
@@ -198,15 +196,88 @@ def user_page(page_number):
         return redirect(url_for('login'))
 
 
+"""
+post用于呈现用户的评论帖子 每一行是一个超链接，可以到每一个帖子里
+每页有着一定的remarks，排序从点赞量高到低，每个用户点赞一次，一样的话按照排序从新到旧
+点进帖子后也是一个多页的界面，分多个评论区
+一个帖子对应一个发帖人，发帖的id，评论者，评论语言
+数据库通过发帖人和id来确定数据库的表，一个帖子表的格式是：发帖人_id
+有一个remark表储存各个帖子的基本信息 基本信息包括：发帖人，标题（限制字数），帖子id
+
+帖子在用户自己的网站里发出
+"""
+
+
 @app.route('/remark/<page_number>')
 def remark(page_number):
+    """
+    该页是说有发布的帖子
+    :param page_number:
+    :return:
+    """
     if 'username' in session:
         username = session.get('username')
-
-        return render_template(f'remarks/remark_page_{page_number}.html', username=username)
+        dictionary = {}
+        count = 5  # 每页的超链接个数
+        if request.method == 'GET':
+            cur = g.remark_db.cursor()
+            cur.execute("select * from post")
+            result = cur.fetchall()
+            if result:  # 防止None
+                dictionary['post_content'] = result[page_number * count - count, page_number * count]
+            else:
+                dictionary['post_content'] = []
+            cur.close()
+            return render_template(f'remark_post/post_page_{page_number}.html', username=username, dictionary=dictionary)
     else:
         return redirect(url_for('login'))
 
 
+@app.route("/remark_area/<poster_id:str>/<page_number>")
+def remark_area(poster_id, page_number):
+    """
 
+    :param poster_id:
+    :param page_number:
+    :return:
+    """
+    if 'username' in session:
+        username = session.get('username')
+        dictionary = {}
+
+        if request.method == 'GET':
+            cur = g.remark_db.cursor()
+            cur.execute(f"select * from {poster_id}")
+            result = cur.fetchall()
+            count = 5  # 每页的评论个数
+            if result:  # 防止None
+                dictionary['remark'] = result[page_number * count - count, page_number * count]
+            else:
+                dictionary['remark'] = []
+            cur.close()
+            return render_template(f'remark_post/remark_page_{page_number}.html', username=username, dictionary=dictionary)
+        elif request.method == 'POST':
+            # 发表评论
+            # 获取基本信息
+            pass
+
+
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/post')
+def post():
+    if 'username' in session:
+        username = session.get('username')
+        dictionary = {}
+        if request.method == 'GET':
+            return render_template(f'')
+        elif request.method == "POST":
+            # 发布帖子
+            # 获取基本信息
+            insert_into_post_table(g)
+            return render_template()
+    else:
+        return redirect(url_for('login'))
 

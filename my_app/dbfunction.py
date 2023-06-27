@@ -131,3 +131,54 @@ def create_user_file(username):
         shutil.copy(os.path.join(path, 'static\\user_page.css'),
                     os.path.join(path, f'static\\users\\{username}\\user_page.css'))
 
+
+def create_remark_area_table(g, table_name):
+    """
+    用户发布帖子时创建表
+    :param table_name:
+    :param g: g.remark_db is a database
+    :return: bool
+    """
+    cur = g.remark_db.cursor()
+    cur.execute(f'''create table {table_name}(
+                        id integer primary key  AUTOINCREMENT,
+                        poster_name varchar(20),
+                        title varchar(20),
+                        main_contain varchar(800),
+                        post_id integer,
+                        herf varchar(500))''')
+    g.remark_db.commit()
+    cur.close()
+
+
+def insert_into_post_table(g, poster_name, title, main_contain, poster_id, herf):
+    """
+    插入post表主要信息
+    :param g:
+    :param poster_name:
+    :param title:
+    :param main_contain:
+    :param poster_id:
+    :param herf:
+    :return:
+    """
+    cur = g.remark_db.cursor()
+    cur.execute(f'insert into post(poster_name, title, main_contain, poster_id, herf) values(?,?,?,?,?)',
+                (poster_name, title, main_contain, poster_id, herf))
+    g.remark_db.commit()
+    cur.close()
+
+
+def insert_remark(g, table_name, remark_people, remark):
+    """
+    保存评论
+    :param g:
+    :param table_name:
+    :param remark_people:
+    :param remark:
+    :return:
+    """
+    cur = g.remark_db.cursor()
+    cur.execute(f'insert into {table_name}(remark_people, remark) values(?,?)', (remark_people, remark))
+    g.remark_db.commit()
+    cur.close()
