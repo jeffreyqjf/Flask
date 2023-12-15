@@ -233,7 +233,7 @@ def remark(page_number):
         return redirect(url_for('login'))
 
 
-@app.route("/remark_area/<str:id>/<page_number>")
+@app.route("/remark_area/<id>/<int:page_number>")
 def remark_area(id, page_number):
     """
 
@@ -277,8 +277,9 @@ def post():
     if 'username' in session:
         username = session.get('username')
         dictionary = {}
+        dictionary['username'] = username
         if request.method == 'GET':
-            return render_template('remark_post/post.html')
+            return render_template('remark_post/post.html', dictionary=dictionary)
         elif request.method == "POST":
             # 发布帖子
             # 获取基本信息
