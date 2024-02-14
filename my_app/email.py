@@ -18,9 +18,9 @@ def send_mail(subject, sender, recipients, text_body, html_body):
     thr = threading.Thread(target=send_async_email, args=[app, msg])
     thr.start()
 def send_register_mail(recipients, username,token):
-    print(recipients, username,token)
+    #print(recipients, username,token)
     print(render_template('email/register_mail.txt', user=username, token=token))
-    print(render_template('email/register_mail.html', user=username, token=token))
+    #print(render_template('email/register_mail.html', user=username, token=token))
 
     send_mail('口令验证',
               sender=app.config['MAIL_USERNAME'],

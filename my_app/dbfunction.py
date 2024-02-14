@@ -7,13 +7,12 @@ from time import time
 import os
 import shutil
 
-
 def check_password(g, username, password):
     cur = g.db.cursor()
     cur.execute(f'select * from user where username="{username}"')
 
     result = cur.fetchone()
-    print('check_password', result)
+    #print('check_password', result)
     if result:
         result = result[2]
     else:
@@ -56,10 +55,10 @@ def check_email_whether_unique(g, email):
 
 def check_email(g, email, username):
     cur = g.db.cursor()
-    cur.execute('select * from user where email=?', (email,))
+    cur.execute('select * from user where email=%s', (email,))
     result = cur.fetchone()
     cur.close()
-    print(result)
+    #print(result)
     if result is not None:
         if username in result:
             return True
@@ -72,26 +71,26 @@ def check_email(g, email, username):
 def append_user(g, username, password, email):
     cur = g.db.cursor()
     password_hash = generate_password_hash(password)
-    print(password_hash,type(password_hash))
-    print("email:",email)
-    print(password,type(password))
-    print(username)
-    cur.execute('insert into user(username,password_hash,email) values(?,?,?)',(username,password_hash,email))
+    #print(password_hash,type(password_hash))
+    #print("email:",email)
+    #print(password,type(password))
+    #print(username)
+    cur.execute('insert into user(username,password_hash,email) values(%s,%s,%s)',(username,password_hash,email))
     g.db.commit()
-    print('welcome to new user')
+    #print('welcome to new user')
     cur.close()
 
 def get_token(g,email,expires_in=600):
     cur = g.db.cursor()
-    cur.execute('select * from user where email=?',(email,))
+    cur.execute('select * from user where email=%s',(email,))
     result = cur.fetchone()
     cur.close()
-    print('result:',result)
-    print('id:',result[0])
+    #print('result:',result)
+    #print('id:',result[0])
     if result :
         token = jwt.encode({'reset_password':result[0],'exp': time() + expires_in},app.config['SECRET_KET'],algorithm='HS256')
-        print('token:',type(token),token)
-        print('username:',result[1])
+        #print('token:',type(token),token)
+        #print('username:',result[1])
 
         return (token,result[3],result[1])
 
@@ -105,18 +104,18 @@ def tokens_user(g,token):
         cur.close()
     else:
         cur.close()
-        print('id is none')
+        #print('id is none')
 
 
 def change_user(g,user,set_password):
     cur = g.db.cursor()
-    cur.execute('update user set password_hash = ? where username=?',(generate_password_hash(set_password),user))
+    cur.execute('update user set password_hash = %s where username=%s',(generate_password_hash(set_password),user))
     g.db.commit()
     cur.close()
 
 
 def create_user_file(username):
-    print(os.getcwd())  # C:\Users\de'l'l\PycharmProjects\web
+    #print(os.getcwd())  # C:\Users\de'l'l\PycharmProjects\web
     path = os.path.join(os.getcwd(), 'my_app')
     if not os.path.exists(os.path.join(path, f'templates\\users\\{username}')):  # if it was not the user I care
         os.mkdir(os.path.join(path, f'templates\\users\\{username}'))  # create html

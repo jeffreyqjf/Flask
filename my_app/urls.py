@@ -8,11 +8,23 @@ from my_app.dbfunction import change_user, tokens_user,get_token,create_user_fil
 from flask import g,flash,get_flashed_messages
 from my_app.email import send_password_reset_email, send_register_mail
 
-
+import pymysql
+mysqlhost=app.config['mysqlhost']
+mysqluser=app.config['mysqluser']
+mysqlpassword=app.config['mysqlpassword']
+mysqlport=app.config['mysqlport']
+mysqldb=app.config['mysqldb']
 
 @app.before_request
 def before_request():
-    g.db = sqlite3.connect(app.config['database'])
+    g.db = pymysql.connect(
+    host=mysqlhost,
+    user=mysqluser,
+    passwd=mysqlpassword,
+    port=mysqlport,
+    db=mysqldb,
+    charset='utf8'   
+)
 
     if session.get('token_register'):
         g.token_register = session.get('token_register')
@@ -28,11 +40,11 @@ def teardown_request(e):
     db = getattr(g, 'db', None)
     if db:
         db.close()
-    g.db.close()
 
 
 @app.route('/')
 def home():
+    
     return redirect(url_for('index'))
 
 
@@ -54,8 +66,8 @@ def login():
         if request.method == 'POST':
             username = request.form.get('username')
             password = request.form.get('password')
-            print(username)
-            print(password)
+            #print(username)
+            #print(password)
             if not (username or password):
                 error = '请填写有效信息'
                 return render_template('login.html', error=error)
@@ -156,11 +168,11 @@ def reset_password_request():
         email = request.form.get('email')
         username = request.form.get('username')
         if not check_email(g, email, username):
-            print(check_email(g, email, username))
+            #print(check_email(g, email, username))
             error = '无该用户'
             return render_template('reset_password_request.html',error=error)
         else:
-            print('reset_password_request email:',email)
+            #print('reset_password_request email:',email)
             values = get_token(g,email=email)
             send_password_reset_email(token=values[0],recipients=values[1],username=values[2])
             return render_template('reset_password_request_successful.html')
