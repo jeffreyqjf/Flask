@@ -88,7 +88,7 @@ def get_token(g,email,expires_in=600):
     cur.close()
     print('result:',result)
     print('id:',result[0])
-    if id :
+    if result :
         token = jwt.encode({'reset_password':result[0],'exp': time() + expires_in},app.config['SECRET_KET'],algorithm='HS256')
         print('token:',type(token),token)
         print('username:',result[1])
@@ -97,9 +97,9 @@ def get_token(g,email,expires_in=600):
 
 def tokens_user(g,token):
     cur = g.db.cursor()
-    id = jwt.decode(token,app.config['SECRET_KET'],algorithms=['HS256'])['reset_password']
-    if id:
-        cur.execute(f'select * from user where id={id}')
+    user_id = jwt.decode(token,app.config['SECRET_KET'],algorithms=['HS256'])['reset_password']
+    if user_id:
+        cur.execute(f'select * from user where id={user_id}')
         result = cur.fetchone()
         return result
         cur.close()
