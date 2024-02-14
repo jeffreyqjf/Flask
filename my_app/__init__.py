@@ -2,10 +2,14 @@ from flask import Flask
 from flask_mail import Mail
 
 app = Flask(__name__)
-app.config['database'] = 'data.db'
+app.config['mysqlhost']='######'
+app.config['mysqluser']='######'
+app.config['mysqlpassword']='######'
+app.config['mysqlport']=######
+app.config['mysqldb']='######'
 app.config['MAIL_SERVER'] = 'smtp.qq.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = '##############'
+app.config['MAIL_USERNAME'] = '############'
 app.config['MAIL_PASSWORD'] = '############'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True

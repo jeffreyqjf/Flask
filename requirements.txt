@@ -7,3 +7,5 @@ Flask-SQLAlchemy
 Flask-WTF
 PyJWT
 Flask-Script
+gevent
+pymysql
